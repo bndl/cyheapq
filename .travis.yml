@@ -1,0 +1,16 @@
+language: python
+
+python:
+  - 3.4
+  - 3.5
+  - 3.5-dev
+  - 3.6-dev
+  - nightly
+
+install:
+  - pip install pip --upgrade
+  - pip install -e .[dev]
+
+script:
+  - python setup.py test
+

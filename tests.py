@@ -22,22 +22,23 @@ class CyHeapQTests(TestCase):
         a = [random.random() for _ in range(1000)]
         b = [random.random() for _ in range(1000)]
         c = [random.random() for _ in range(1000)]
-        
-        actual = list(cyheapq.merge(a,b,c))
-        expected = list(heapq.merge(a,b,c))
+
+        actual = list(cyheapq.merge(a, b, c))
+        expected = list(heapq.merge(a, b, c))
         self.assertEqual(actual, expected)
-        
+
+
     def test_nlargest(self):
         a = [random.random() for _ in range(1000)]
-        
-        actual = list(cyheapq.nlargest(10, a))
-        expected = list(heapq.nlargest(10, a))
+
+        actual = cyheapq.nlargest(10, a)
+        expected = heapq.nlargest(10, a)
         self.assertEqual(actual, expected)
-        
+
+
     def test_nsmallest(self):
         a = [random.random() for _ in range(1000)]
-        
-        actual = list(cyheapq.nsmallest(10, a))
-        expected = list(heapq.nsmallest(10, a))
+
+        actual = cyheapq.nsmallest(10, a)
+        expected = heapq.nsmallest(10, a)
         self.assertEqual(actual, expected)
-        

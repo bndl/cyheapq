@@ -37,7 +37,6 @@ if __name__ == '__main__':
         extras_require=dict(
             dev=[
                 'cython',
-                'pytest',
             ],
         ),
 
