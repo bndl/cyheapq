@@ -1,8 +1,25 @@
 __all__ = ['heappush', 'heappop', 'heapify', 'heapreplace', 'merge',
            'nlargest', 'nsmallest', 'heappushpop']
 
-
 from heapq import *
+
+# If available, use C implementation
+try:
+    from _heapq import *
+except ImportError:
+    pass
+try:
+    from _heapq import _heapreplace_max
+except ImportError:
+    pass
+try:
+    from _heapq import _heapify_max
+except ImportError:
+    pass
+try:
+    from _heapq import _heappop_max
+except ImportError:
+    pass
 
 
 def merge(*iterables, object key=None, bint reverse=False):
