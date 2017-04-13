@@ -18,27 +18,32 @@ import cyheapq
 
 
 class CyHeapQTests(TestCase):
+    def check_merge(self, key=None, reverse=False):
+        a = sorted((random.random() for _ in range(10)), key=key, reverse=reverse)
+        b = sorted((random.random() for _ in range(10)), key=key, reverse=reverse)
+        c = sorted((random.random() for _ in range(10)), key=key, reverse=reverse)
+
+        for lists in ((a,), (a, b), (a, b, c,)):
+            actual = list(cyheapq.merge(*lists, key=key, reverse=reverse))
+            expected = list(heapq.merge(*lists, key=key, reverse=reverse))
+            self.assertEqual(actual, expected)
+
     def test_merge(self):
-        a = [random.random() for _ in range(1000)]
-        b = [random.random() for _ in range(1000)]
-        c = [random.random() for _ in range(1000)]
+        self.check_merge()
+        self.check_merge(key=lambda i:-i)
+        self.check_merge(reverse=True)
+        self.check_merge(key=lambda i:-i, reverse=True)
 
-        actual = list(cyheapq.merge(a, b, c))
-        expected = list(heapq.merge(a, b, c))
+    def check_take(self, taker, n, key=None):
+        a = [random.random() for _ in range(12)]
+        actual = getattr(cyheapq, taker)(10, a, key=key)
+        expected = getattr(heapq, taker)(10, a, key=key)
         self.assertEqual(actual, expected)
-
 
     def test_nlargest(self):
-        a = [random.random() for _ in range(1000)]
-
-        actual = cyheapq.nlargest(10, a)
-        expected = heapq.nlargest(10, a)
-        self.assertEqual(actual, expected)
-
+        self.check_take('nlargest', 10)
+        self.check_take('nlargest', 10, key=lambda i:-i)
 
     def test_nsmallest(self):
-        a = [random.random() for _ in range(1000)]
-
-        actual = cyheapq.nsmallest(10, a)
-        expected = heapq.nsmallest(10, a)
-        self.assertEqual(actual, expected)
+        self.check_take('nsmallest', 10)
+        self.check_take('nsmallest', 10, key=lambda i:-i)
