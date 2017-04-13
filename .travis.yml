@@ -12,5 +12,6 @@ install:
   - pip install -e .[dev]
 
 script:
-  - python setup.py test
+  - python setup.py build_ext --inplace
+  - python -m unittest tests
 
