@@ -3,7 +3,64 @@ __all__ = ['heappush', 'heappop', 'heapify', 'heapreplace', 'merge',
 
 from heapq import *
 
-# If available, use C implementation
+def _heappop_max(heap):
+    lastelt = heap.pop()
+    if heap:
+        returnitem = heap[0]
+        heap[0] = lastelt
+        _siftup_max(heap, 0)
+        return returnitem
+    return lastelt
+
+
+def _heapreplace_max(heap, item):
+    returnitem = heap[0]
+    heap[0] = item
+    _siftup_max(heap, 0)
+    return returnitem
+
+
+def _heapify_max(x):
+    n = len(x)
+    for i in reversed(range(n//2)):
+        _siftup_max(x, i)
+
+
+def _siftdown_max(object heap, int startpos, int pos):
+    cdef int parentpos
+    cdef object newitem, parent
+    newitem = heap[pos]
+    while pos > startpos:
+        parentpos = (pos - 1) >> 1
+        parent = heap[parentpos]
+        if parent < newitem:
+            heap[pos] = parent
+            pos = parentpos
+            continue
+        break
+    heap[pos] = newitem
+
+
+def _siftup_max(object heap, int pos):
+    cdef int startpos, endpos, childpos, rightpos
+    cdef object newitem
+    endpos = len(heap)
+    startpos = pos
+    newitem = heap[pos]
+    childpos = 2 * pos + 1
+    while childpos < endpos:
+        rightpos = childpos + 1
+        if rightpos < endpos and not heap[rightpos] < heap[childpos]:
+            childpos = rightpos
+        heap[pos] = heap[childpos]
+        pos = childpos
+        childpos = 2*pos + 1
+    heap[pos] = newitem
+    _siftdown_max(heap, startpos, pos)
+
+
+# If available, use C implementation from _heapq
+
 try:
     from _heapq import *
 except ImportError:
