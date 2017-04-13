@@ -1,5 +1,4 @@
 from statistics import mean
-import heapq
 import importlib
 import time
 
@@ -28,7 +27,7 @@ def test(runs, loops, f, *args):
         stop = time.monotonic()
         times.append(stop-start)
     times.sort()
-    return mean(times[1:-2])
+    return mean(times[1:-1])
 
 
 
