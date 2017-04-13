@@ -13,26 +13,28 @@
 from unittest import TestCase
 import heapq
 import random
+import sys
 
 import cyheapq
 
 
 class CyHeapQTests(TestCase):
-    def check_merge(self, key=None, reverse=False):
-        a = sorted((random.random() for _ in range(10)), key=key, reverse=reverse)
-        b = sorted((random.random() for _ in range(10)), key=key, reverse=reverse)
-        c = sorted((random.random() for _ in range(10)), key=key, reverse=reverse)
+    def check_merge(self, **kwargs):
+        a = sorted((random.random() for _ in range(10)), **kwargs)
+        b = sorted((random.random() for _ in range(10)), **kwargs)
+        c = sorted((random.random() for _ in range(10)), **kwargs)
 
         for lists in ((a,), (a, b), (a, b, c,)):
-            actual = list(cyheapq.merge(*lists, key=key, reverse=reverse))
-            expected = list(heapq.merge(*lists, key=key, reverse=reverse))
+            actual = list(cyheapq.merge(*lists, **kwargs))
+            expected = list(heapq.merge(*lists, **kwargs))
             self.assertEqual(actual, expected)
 
     def test_merge(self):
         self.check_merge()
-        self.check_merge(key=lambda i:-i)
-        self.check_merge(reverse=True)
-        self.check_merge(key=lambda i:-i, reverse=True)
+        if sys.version_info >= (3,5):
+            self.check_merge(reverse=True)
+            self.check_merge(key=lambda i:-i)
+            self.check_merge(key=lambda i:-i, reverse=True)
 
     def check_take(self, taker, n, key=None):
         a = [random.random() for _ in range(12)]
